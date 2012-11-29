@@ -19,7 +19,6 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 		$this->setDefaultDir ( 'DESC' );
 		$this->setSaveParametersInSession ( true );
 	}
-
 	/**
 	 * (non-PHPdoc)
 	 * @see Mage_Adminhtml_Block_Widget_Grid::_prepareCollection()
