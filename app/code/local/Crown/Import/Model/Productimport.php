@@ -396,10 +396,16 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
                 foreach ($mediaImages as $mediaImage) {
                     // Check for media image on server or remote host
                     try {
+<<<<<<< HEAD
                         $mediaImageFiltered = $this->filterRemoveBeginningSlash($mediaImage);
                         $mediaHlper->checkForValidImageFiles( $mediaImageFiltered, $profile );
                     } catch (Exception $e ) {
                         $errorMessages[$sku][] = 'Media Gallery ' . $e->getMessage() . " '{$mediaImageFiltered}'";
+=======
+                        $mediaHlper->checkForValidImageFiles( $mediaImage, $profile );
+                    } catch (Exception $e ) {
+                        $errorMessages[$sku][] = 'Media Gallery ' . $e->getMessage() . " '{$mediaImage}'";
+>>>>>>> origin/fix/MGN-1176
                     }
                 }
             }
