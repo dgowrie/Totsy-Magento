@@ -167,6 +167,7 @@ class Crown_Import_Helper_Data extends Mage_Core_Helper_Abstract {
         $imagesFromDir = $profile->getImagesBaseDir();
 
         $fromFilename = $imagesFromDir . DS . ltrim($filename, DS);
+        Mage::log($fromFilename, null, 'test.log');
         $fromExists = is_readable($fromFilename);
 
         if (!$fromExists) {
