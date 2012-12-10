@@ -133,7 +133,7 @@
     $_attributes = explode(',',$depts);
     $allowAttrArray = array('boys','girls','moms_dads');
     ?>
-    
+    <?php echo $this->getChildHtml('catalog.layered.nav');?>
     <?php echo $this->getProductListHtml() ?>
     
     <!--
