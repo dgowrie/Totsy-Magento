@@ -34,13 +34,6 @@
 <?php if($this->canShowBlock()): ?>
 <div class="block block-layered-nav">
     <?php echo $this->getStateHtml() ?>
-    <?php
-    foreach(Mage::getSingleton('catalog/layer')->getFilterableAttributes() as $attribute) {
-        Zend_Debug::dump($attribute->debug());
-    }
-    ?>
-
-
         <div class="block-content pull-right">
             <dl id="narrow-by-list">
                 <?php $_filters = $this->getFilters() ?>
