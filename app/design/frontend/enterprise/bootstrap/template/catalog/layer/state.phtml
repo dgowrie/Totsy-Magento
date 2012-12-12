@@ -33,12 +33,11 @@
 ?>
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
-<div class="currently">
-    <strong><span class="label" style="font-size: 13px;">Current Selection:</span></strong>
-    <dl id="current-filters">
+<div class="currently" style="margin-bottom: 15px;">
+    <h3>Currently Showing
     <?php foreach ($_filters as $_filter): ?>
-        <dt><?php echo $this->__($_filter->getName()) ?>: <?php echo $this->stripTags($_filter->getLabel()) ?> <a title="<?php echo $this->__('Remove This Item') ?>" href="<?php echo $_filter->getRemoveUrl();?>" class="icon-remove-circle"></a></dt>
-    </dl>
+        <?php echo $this->__($_filter->getName()) ?> <span style="color:red;"><?php echo $this->stripTags($_filter->getLabel()) ?></span> <span style="font-size:12px;color:black;">(<a title="<?php echo $this->__('Remove This Item') ?>" style="color:black;text-decoration: underline" href="<?php echo $_filter->getRemoveUrl();?>">select another <?php echo $this->__(strtolower($_filter->getName())) ?></a>)</span>
+    </h3>
     <?php endforeach; ?>
 </div>
 <?php endif; ?>
