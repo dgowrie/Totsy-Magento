@@ -22,11 +22,6 @@
                     <collection>Totsy_Solrsearch_Model_Resource_Collection</collection>
      			</rewrite>
      		</enterprise_search_resource>
-            <catalogsearch>
-                <rewrite>
-                    <Layer>Totsy_Solrsearch_Model_Layer</Layer>
-                </rewrite>
-            </catalogsearch>
      	</models>
      </global>
 </config>
