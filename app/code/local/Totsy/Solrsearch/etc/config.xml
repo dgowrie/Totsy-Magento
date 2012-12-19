@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Solrsearch
+ * @author      Slavik Koshelevskiy <skosh@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Solrsearch>
+            <version>1.0.0</version>
+        </Totsy_Solrsearch>
+    </modules>
+     <global>
+	   	<models>
+	   		<enterprise_search_resource>
+     			<rewrite>
+     				<engine>Totsy_Solrsearch_Model_Resource_Engine</engine>
+     				<index>Totsy_Solrsearch_Model_Resource_Index</index>
+                    <collection>Totsy_Solrsearch_Model_Resource_Collection</collection>
+     			</rewrite>
+     		</enterprise_search_resource>
+            <catalogsearch>
+                <rewrite>
+                    <Layer>Totsy_Solrsearch_Model_Layer</Layer>
+                </rewrite>
+            </catalogsearch>
+     	</models>
+     </global>
+</config>

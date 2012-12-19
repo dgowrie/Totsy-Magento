@@ -85,5 +85,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Reward>
+        <Totsy_Solrsearch>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Solrsearch>
     </modules>
 </config>
