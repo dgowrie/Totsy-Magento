@@ -41,4 +41,42 @@ class Totsy_Solrsearch_Model_Resource_Collection extends Enterprise_Search_Model
 
         return $this->_totalRecords;
     }
+
+
+    /**
+     * Load faceted data if not loaded
+     *
+     * @return Enterprise_Search_Model_Resource_Collection
+     */
+    public function loadFacetedData()
+    {
+        if (empty($this->_facetedConditions)) {
+            $this->_facetedData = array();
+            return $this;
+        }
+
+        list($query, $params) = $this->_prepareBaseParams();
+        $params['solr_params']['facet'] = 'on';
+        $params['facet'] = $this->_facetedConditions;
+
+        if (empty($params['filters']['date_start'])){
+            $params['filters']['date_start'] = array(
+            	'from' => null,
+            	'to' => 'NOW'
+            );
+        }
+        if (empty($params['filters']['date_end'])){
+            $params['filters']['date_end'] = array(
+            	'from' => 'NOW',
+            	'to' => null
+            );
+        }
+        
+        $result = $this->_engine->getResultForRequest($query, $params);
+        $this->_facetedData = $result['faceted_data'];
+        $this->_facetedDataIsLoaded = true;
+
+        return $this;
+    }
 }
+
