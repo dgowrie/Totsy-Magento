@@ -123,8 +123,9 @@ HpCheckout.prototype = {
         }
         jQuery("#payment_form_" + payment_method).show();
 	},
-	switchAddress: function() {
-		var clickedAddress = jQuery(this);
+	switchAddress: function(formId) {
+		var clickedAddress = jQuery(formId);
+		
 		var blockType = '';
 		var hpcheckoutObject = HpCheckout.prototype;
 		if (clickedAddress.attr('id') == 'billing-address-select') {

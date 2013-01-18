@@ -23,27 +23,36 @@
 	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="shipping[street][1]" id="shipping:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" placeholder="<?php echo $this->__('Street Address Line 2') ?>" class="input-text streetaddress2" />
 	                 </div>
 	    	     </div>
-	    	     <div> 
-	    	         <div class="pull-left field half-of-half">
-	                     <label for="shipping:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
-	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
-	                 </div>	
-	    	     	 <div class="pull-left half-of-half">
-	                     <label for="shipping:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
-		                 <div class="totsy-selective-input-box">
-		                     <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
-		                       <option value=""><?php echo $this->__('Please select state') ?></option>
-		                     </select>
-		                 </div>
-	                     <script type="text/javascript">
-                            $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                         </script>
-                         <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
-	                  </div> 
-	                  <div class="field half-of-half">
-	                      <label for="shipping:postcode"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
-	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
-	                  </div>
+	    	     <div>
+	    	         <div>
+	    	             <div class="pull-left">
+	                          <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
+	                      </div>
+	                      <div>
+	                          <button class="button button-exception ship-to-billing btn" id="get_city_and_state" type="button">
+                 			      <div class="totsy-button-white">GET CITY AND STATE
+                 			      </div>
+                 			  </button>
+	                      </div>
+	                 </div>
+	                 <div>
+	    	             <div class="pull-left">
+	                         <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
+	                     </div>	
+	    	             <div>
+		                     <div class="totsy-selective-input-box">
+		                         <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
+		                           <option value=""><?php echo $this->__('Please select state') ?></option>
+		                         </select>
+		                     </div>
+	                         <script type="text/javascript">
+                                $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                             </script>
+                             <div>
+                                 <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
+                             </div>
+	                     </div> 
+	                 </div>
 	              </div>
 	              <div>
 	    	          <div class="field half-of-half">
@@ -72,6 +81,21 @@
 
     jQuery(document).ready( function() {
     
+        jQuery("#get_city_and_state").click( function(){
+            jQuery.ajax({
+			    url: "/customer/zipCodeInfo/lookup",
+			    dataType: "json",
+			    type: "POST",
+			    data: { zip: jQuery("[id='shipping:postcode']").val() },
+			    error: function(data) {
+			    	console.log(data);
+			    },
+			    success: function(response) {
+                    console.log(response);
+			    }
+			});
+        });
+    
         jQuery( '#shipping\\:postcode' ).change( function() { hpcheckout.update(true); });
         jQuery( '#shipping\\:region_id' ).change( function() { 
 
@@ -79,11 +103,15 @@
 
         hpcheckout.update(true); });
     
-    	if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!=""){
-    		hpcheckout.switchAddress;
+    	if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
+    		hpcheckout.switchAddress("#shipping-address-select");
     	}
         
-        jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
+        jQuery( '#shipping-address-select' ).bind( 'change', function() {
+            hpcheckout.switchAddress("#shipping-address-select");
+            hpcheckout.update(true);
+        });
+        
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
 
