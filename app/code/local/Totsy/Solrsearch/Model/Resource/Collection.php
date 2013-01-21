@@ -60,6 +60,64 @@ class Totsy_Solrsearch_Model_Resource_Collection extends Enterprise_Search_Model
         return $this;
     }
 
+    /**
+     * Search documents by query
+     * Set found ids and number of found results
+     *
+     * @return Enterprise_Search_Model_Resource_Collection
+     */
+    protected function _beforeLoad()
+    {
+        $ids = array();
+        if ($this->_engine) {
+            list($query, $params) = $this->_prepareBaseParams();
+
+            if ($this->_sortBy) {
+                $params['sort_by'] = $this->_sortBy;
+            }
+            if ($this->_pageSize !== false) {
+                $page              = ($this->_curPage  > 0) ? (int) $this->_curPage  : 1;
+                $rowCount          = ($this->_pageSize > 0) ? (int) $this->_pageSize : 1;
+                $params['offset']  = $rowCount * ($page - 1);
+                $params['limit']   = $rowCount;
+            }
+
+            $needToLoadFacetedData = (!$this->_facetedDataIsLoaded && !empty($this->_facetedConditions));
+            if ($needToLoadFacetedData) {
+                $params['solr_params']['facet'] = 'on';
+                $params['facet'] = $this->_facetedConditions;
+            }
+            
+            $this->_addDateFilter($params);
+            
+            $result = $this->_engine->getIdsByQuery($query, $params);
+            $ids    = (array) $result['ids'];
+
+            if ($needToLoadFacetedData) {
+                $this->_facetedData = $result['faceted_data'];
+            }
+        }
+
+        $this->_searchedEntityIds = &$ids;
+        $this->getSelect()->where('e.entity_id IN (?)', $this->_searchedEntityIds);
+
+        echo '<pre>';
+        print_r($this->_searchedEntityIds);
+        echo '</pre>';
+        
+        //echo '<br>'.$this->getSelect()->__toString().'<br>';
+
+        /**
+         * To prevent limitations to the collection, because of new data logic.
+         * On load collection will be limited by _pageSize and appropriate offset,
+         * but third party search engine retrieves already limited ids set
+         */
+        $this->_storedPageSize = $this->_pageSize;
+        $this->_pageSize = false;
+
+        return parent::_beforeLoad();
+    }
+
     protected function _addDateFilter(&$params,$both=true){
         if (empty($params['filters']['date_start']) && ($both==true || $both=='start') ){
             $params['filters']['date_start'] = array(
