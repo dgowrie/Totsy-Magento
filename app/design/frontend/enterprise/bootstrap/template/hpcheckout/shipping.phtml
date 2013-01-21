@@ -1,65 +1,60 @@
 <form id="hpcheckout-shipping-form" action="">
 	    <div id="shipping-new-address-form fields alpha">
 	    	    <div > 
-	    		    <div class="pull-left field half-of-half">
+	    		    <div class="pull-left field ">
 	    	           <label for="shipping:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
 	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
 	    	        </div>
-	    	        <div class="field half-of-half">
+	    	        <div class="field ">
 	    	            <label for="shipping:lastname" class="required"><em>*&nbsp;</em><?php echo $this->__('last name') ?></label>
 	    	            <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname" />
 	    	        </div>
 	    	    </div>
-	    	    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
-	    	    <input type="hidden" name="shipping[selected]" id="shipping:selected" />
-	    	         <div class="field half-of-half">
-			            <label for="shipping:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
-			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1"/>
+	    	    <div>
+	    	        <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
+	    	        <input type="hidden" name="shipping[selected]" id="shipping:selected" />
+	    	             <div class="field ">
+			                <label for="shipping:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
+			                <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1"/>
 	    	        </div>
 	    	     </div>
 	    	     <div>
-	    	         <div class="pull-left field half-of-half">
+	    	         <div class="pull-left">
 	                   <label for="shipping:street2">&nbsp;<?php echo $this->__('street address line 2') ?></label>
 	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="shipping[street][1]" id="shipping:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" placeholder="<?php echo $this->__('Street Address Line 2') ?>" class="input-text streetaddress2" />
 	                 </div>
 	    	     </div>
-	    	     <div>
-	    	         <div>
-	    	             <div class="pull-left">
-	                          <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
-	                      </div>
-	                      <div>
-	                          <button class="button button-exception ship-to-billing btn" id="get_city_and_state" type="button">
-                 			      <div class="totsy-button-white">GET CITY AND STATE
-                 			      </div>
-                 			  </button>
-	                      </div>
+	    	     </div>
+	    	        <div class="pull-left">
+	                     <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                 </div>
-	                 <div>
-	    	             <div class="pull-left">
-	                         <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
-	                     </div>	
-	    	             <div>
-		                     <div class="totsy-selective-input-box">
-		                         <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
-		                           <option value=""><?php echo $this->__('Please select state') ?></option>
-		                         </select>
-		                     </div>
-	                         <script type="text/javascript">
-                                $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                             </script>
-                             <div>
-                                 <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
-                             </div>
-	                     </div> 
+	                 <div class="pull-left">
+	                     <div id="zip_info_message" style="line-height:18px; width:auto !important; padding:10px;">
+	                         Enter a ZIP for City and State
+	                     </div>
+	                     <div id="city_and_state" style="display:none;">
+	    	                 <div class="pull-left">
+	                             <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" style="margin-left:9px" id="shipping:city" />
+	                         </div>	
+	    	                 <div class="pull-right">
+		                         <div class="totsy-selective-input-box">
+		                             <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="state">
+		                               <option value=""><?php echo $this->__('Please select state') ?></option>
+		                             </select>
+		                         </div>
+	                             <script type="text/javascript">
+                                    $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                                 </script>
+                                     <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
+	                         </div> 
+	                     </div>
 	                 </div>
-	              </div>
 	              <div>
-	    	          <div class="field half-of-half">
+	    	          <div class="field ">
 	    	        	    <label for="shipping:telephone"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
 	    	         </div> 
-	                 <div class="field half-of-half">
+	                 <div class="field ">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
 			             <div class="totsy-selective-input-box totsy-selective-input-box-shipping-country country">
 			             	<?php echo $this->getCountryHtmlSelect('shipping') ?>
@@ -79,9 +74,11 @@
 
     var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
 
+    var currentCityState = new Object();
+
     jQuery(document).ready( function() {
     
-        jQuery("#get_city_and_state").click( function(){
+        jQuery('#shipping\\:postcode' ).blur( function(){
             jQuery.ajax({
 			    url: "/customer/zipCodeInfo/lookup",
 			    dataType: "json",
@@ -91,7 +88,14 @@
 			    	console.log(data);
 			    },
 			    success: function(response) {
-                    console.log(response);
+			        if(response) {
+			            currentCityState = response[0];
+			            
+			            jQuery("#city_and_state").show();
+			            jQuery("#zip_info_message").hide();
+			            jQuery("[id='shipping:city']").val(currentCityState['city']);
+			            jQuery("[id='shipping:region_id']").val(currentCityState['region_id']);
+			        }
 			    }
 			});
         });
@@ -123,5 +127,3 @@
 	});
 //]]>
 </script>
-
-	

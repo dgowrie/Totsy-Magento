@@ -1100,7 +1100,7 @@ float:left;
 
 .onepage-address-form .zip {
     width:80px ;
-    margin-left: 10px ;
+    /*margin-left: 10px */;
 }
 
 .onepage-address-form .city {
