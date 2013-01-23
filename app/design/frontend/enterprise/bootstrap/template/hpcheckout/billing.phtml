@@ -41,7 +41,7 @@
 	                     <div id="billing_zip_info_message" style="line-height:18px; width:auto !important; vertical-align:middle;padding:10px; display:none">
 	                         Enter a ZIP for City and State
 	                     </div>
-	                     <div id="billing_city_and_state_spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
+	                     <!-- <div id="billing_city_and_state_spinner" style="display: none;"><img src="<?php //echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div> -->
 	                     <div id="billing_city_and_state">
 	    	                 <div class="pull-left">
 	                             <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" style="margin-left:9px" id="billing:city" />
@@ -88,6 +88,11 @@
 	jQuery(document).ready( function() {
 	
 	    checkoutPayment.getCityAndStateByZip("billing");    
+	    
+	    jQuery( '#billing-address-select' ).bind( 'change', function() {
+            hpcheckout.switchAddress("#billing-address-select");
+            checkoutPayment.getCityAndStateByZip("billing");
+        });
         
         if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
             jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
@@ -96,8 +101,9 @@
         if ( jQuery("#billing-address-select").val()!== undefined) {
             if(checkoutPayment.hasProfile==false) {
                 jQuery("#billing-address-select").attr("disabled", false);
+            } else {
+                checkoutPayment.disableBillAddr(true);
             }
-            checkoutPayment.disableBillAddr(true);
         }
 
 	    jQuery('#button_ship_to').bind('click', function() {

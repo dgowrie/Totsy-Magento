@@ -98,9 +98,9 @@ jQuery(document).ready( function() {
 
     var billAddySelect = jQuery("#billing-address-select");
     var shipAddySelect = jQuery("#shipping-address-select");
+    var currentCityState = new Object();
 	
 	var newCardWrap = jQuery('.cc_info');
-	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
 	var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
 	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
 
@@ -202,44 +202,55 @@ jQuery(document).ready( function() {
                 //register events to the right form by type. 'type' could be billing or shipping
                 //var selectedAddress = "test";
                 if( addressFormType=="shipping" ) {
-                   selectedAddress = billAddySelect.val();
-                } else {
                    selectedAddress = shipAddySelect.val();
+                } else {
+                   selectedAddress = billAddySelect.val();
                 }
                 
-                if( selectedAddress!=="" ) { 
+                if( selectedAddress=="" ) { 
                     //hide these. fields when the user selects "new address"
                     jQuery("#" + addressFormType + "_city_and_state").hide();
                     jQuery("#" + addressFormType + "_zip_info_message").show();
                 
-                    jQuery('#' + addressFormType + '\\:postcode' ).blur(function(){
+                    jQuery("[id='" + addressFormType + ":postcode']" ).keyup(function(){                        
                         
-                        jQuery("#" + addressFormType + "_zip_info_message").hide();
-                        jQuery("#" + addressFormType + "_city_and_state_spinner").show();
-                        
-                        jQuery.ajax({
-		    	               url: "/customer/zipCodeInfo/lookup",
-		    	               dataType: "json",
-		    	               type: "POST",
-		    	               data: { zip: jQuery("[id='" + addressFormType + ":postcode']").val() },
-		    	               error: function(data) {
-		    	               	   //console.log(data);
-		    	               },
-		    	               success: function(response) {
-		    	                   if(response) {
-		    	                       currentCityState = response[0];
-		    	                       jQuery("#" + addressFormType + "_city_and_state").hide();
+                        if ( this.value.length>=5 ) {
+                            jQuery("#" + addressFormType + "_zip_info_message").hide();
+                            //jQuery("#" + addressFormType + "_city_and_state_spinner").show();
+                            
+                            jQuery.ajax({
+		    	                   url: "/customer/zipCodeInfo/lookup",
+		    	                   dataType: "json",
+		    	                   type: "POST",
+		    	                   data: { zip: jQuery("[id='" + addressFormType + ":postcode']").val() },
+		    	                   error: function(data) {
+		    	                   	   jQuery("#" + addressFormType + "_city_and_state").show();
+                                       //jQuery("#" + addressFormType + "_zip_info_message").hide();
+		    	                   },
+		    	                   success: function(response) {
+		    	                       if(typeof response[0]!=="undefined") {
+		    	                           currentCityState = response[0];
+		    	                       } 
+		    	                   },
+		    	                   complete: function() {		    	                   
+		    	                       if(typeof currentCityState!=="undefined") {
+		    	                           jQuery("#" + addressFormType + "_zip_info_message").hide();
+		    	                           //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
+		    	                           jQuery("#" + addressFormType + "_city_and_state").show();
+		    	                           jQuery("[id='" + addressFormType + ":city']").val(currentCityState['city']);
+		    	                           jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
+		    	                       } else {
+		    	                           //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
+		    	                           jQuery("#" + addressFormType + "_city_and_state").hide();
+                                           jQuery("#" + addressFormType + "_zip_info_message").show();
+		    	                       }
 		    	                   }
-		    	               },
-		    	               complete: function() {
-		    	                   jQuery("#" + addressFormType + "_zip_info_message").hide();
-		    	                   jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
-		    	                   jQuery("#" + addressFormType + "_city_and_state").show();
-		    	                   jQuery("[id='" + addressFormType + ":city']").val(currentCityState['city']);
-		    	                   jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
-		    	               }
-		    	        });
+		    	            });
+		    	        }
                     });
+                } else {
+                    jQuery("#" + addressFormType + "_city_and_state").show();
+                    jQuery("#" + addressFormType + "_zip_info_message").hide();
                 }
             } 
         };
@@ -256,8 +267,6 @@ jQuery(document).ready( function() {
     jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
         if(this.id == "paypal_payment") {
             newCardWrap.hide();
-//            jQuery('#billing-address').hide();
-//            jQuery('#shipping-address').hide();
         } else {
             jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
             jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
