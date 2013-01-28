@@ -101,12 +101,6 @@ class Totsy_Solrsearch_Model_Resource_Collection extends Enterprise_Search_Model
         $this->_searchedEntityIds = &$ids;
         $this->getSelect()->where('e.entity_id IN (?)', $this->_searchedEntityIds);
 
-        echo '<pre>';
-        print_r($this->_searchedEntityIds);
-        echo '</pre>';
-        
-        //echo '<br>'.$this->getSelect()->__toString().'<br>';
-
         /**
          * To prevent limitations to the collection, because of new data logic.
          * On load collection will be limited by _pageSize and appropriate offset,
