@@ -207,17 +207,16 @@ jQuery(document).ready( function() {
                    selectedAddress = billAddySelect.val();
                 }
                 
-                if( selectedAddress=="" ) { 
+                if( selectedAddress=="" || typeof selectedAddress=="undefined" ) { 
                     //hide these. fields when the user selects "new address"
                     jQuery("#" + addressFormType + "_city_and_state").hide();
                     jQuery("#" + addressFormType + "_zip_info_message").show();
                 
-                    jQuery("[id='" + addressFormType + ":postcode']" ).keyup(function(){                        
+                    jQuery("[id='" + addressFormType + ":postcode']" ).keyup(function() {                        
                         
                         if ( this.value.length>=5 ) {
                             jQuery("#" + addressFormType + "_zip_info_message").hide();
                             //jQuery("#" + addressFormType + "_city_and_state_spinner").show();
-                            
                             jQuery.ajax({
 		    	                   url: "/customer/zipCodeInfo/lookup",
 		    	                   dataType: "json",
