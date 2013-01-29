@@ -198,9 +198,14 @@ jQuery(document).ready( function() {
                    }
                });
             },
-            getCityAndStateByZip: function(addressFormType) {
+            getCityAndStateByZip: function(formId) {
                 //register events to the right form by type. 'type' could be billing or shipping
-                //var selectedAddress = "test";
+                var addressFormType = '';
+                
+                if(formId) {
+                    addressFormType = formId;
+                }
+                
                 if( addressFormType=="shipping" ) {
                    selectedAddress = shipAddySelect.val();
                 } else {
@@ -232,14 +237,13 @@ jQuery(document).ready( function() {
 		    	                       } 
 		    	                   },
 		    	                   complete: function() {		    	                   
-		    	                       if(typeof currentCityState!=="undefined") {
+		    	                       if(typeof currentCityState!=="undefined" && currentCityState!=="") {
 		    	                           jQuery("#" + addressFormType + "_zip_info_message").hide();
 		    	                           //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
 		    	                           jQuery("#" + addressFormType + "_city_and_state").show();
 		    	                           jQuery("[id='" + addressFormType + ":city']").val(currentCityState['city']);
 		    	                           jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
 		    	                       } else {
-		    	                           //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
 		    	                           jQuery("#" + addressFormType + "_city_and_state").hide();
                                            jQuery("#" + addressFormType + "_zip_info_message").show();
 		    	                       }
