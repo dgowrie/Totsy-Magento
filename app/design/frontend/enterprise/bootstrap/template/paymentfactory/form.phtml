@@ -237,7 +237,7 @@ jQuery(document).ready( function() {
 		    	                       } 
 		    	                   },
 		    	                   complete: function() {		    	                   
-		    	                       if(typeof currentCityState!=="undefined" && currentCityState!=="") {
+		    	                       if(typeof currentCityState==="undefined") {
 		    	                           jQuery("#" + addressFormType + "_zip_info_message").hide();
 		    	                           //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
 		    	                           jQuery("#" + addressFormType + "_city_and_state").show();
