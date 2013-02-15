@@ -11,9 +11,11 @@ jQuery(document).ready(function() {
         var hasProfile = '';
         var isCollapsed = '';
         var lastUsedAddressId = '';
+        var zipSearchResults = "";
         return {
             hasProfile: '',
             isCollapsed: false,
+            zipSearchResults: "",
             lastUsedAddressId: '',
             toggleViews: function() {
                 if (this.hasProfile) {
@@ -100,7 +102,6 @@ jQuery(document).ready(function() {
             getCityAndStateByZip: function(formId) {
                 //register events to the right form by type. 'type' could be billing or shipping
                 var addressFormType = '';
-                var results = false;
                 if (formId) {
                     addressFormType = formId;
                 }
@@ -109,6 +110,7 @@ jQuery(document).ready(function() {
                 } else {
                     selectedAddress = billAddySelect.val();
                 }
+                
                 if (selectedAddress == "" || typeof selectedAddress == "undefined") {
                     //hide these. fields when the user selects "new address"
                     jQuery("#" + addressFormType + "_city_and_state").fadeOut();
@@ -130,13 +132,13 @@ jQuery(document).ready(function() {
                                 success: function(response) {
                                     if (typeof response[0] !== "undefined") {
                                         currentCityState = response[0];
-                                        results = true;
+                                        zipSearchResults = true;
                                     } else {
-                                        results = false;
+                                        zipSearchResults = false;
                                     }
                                 },
                                 complete: function() {
-                                    if (results==true) {
+                                    if ( zipSearchResults==true ) {
                                         jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
                                         //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
                                         jQuery("#" + addressFormType + "_city_and_state").fadeIn();
@@ -144,8 +146,8 @@ jQuery(document).ready(function() {
                                         jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
                                     } else {
                                         currentCityState="";
-                                        jQuery("#" + addressFormType + "_city_and_state").fadeOut();
-                                        jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
+                                        //jQuery("#" + addressFormType + "_city_and_state").fadeOut();
+                                        //jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
                                     }
                                 }
                             });
