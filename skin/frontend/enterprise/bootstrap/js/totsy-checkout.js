@@ -100,6 +100,7 @@ jQuery(document).ready(function() {
             getCityAndStateByZip: function(formId) {
                 //register events to the right form by type. 'type' could be billing or shipping
                 var addressFormType = '';
+                var results = false;
                 if (formId) {
                     addressFormType = formId;
                 }
@@ -110,11 +111,11 @@ jQuery(document).ready(function() {
                 }
                 if (selectedAddress == "" || typeof selectedAddress == "undefined") {
                     //hide these. fields when the user selects "new address"
-                    jQuery("#" + addressFormType + "_city_and_state").hide();
-                    jQuery("#" + addressFormType + "_zip_info_message").show();
+                    jQuery("#" + addressFormType + "_city_and_state").fadeOut();
+                    jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
                     jQuery("[id='" + addressFormType + ":postcode']").keyup(function() {
                         if (this.value.length >= 5) {
-                            jQuery("#" + addressFormType + "_zip_info_message").hide();
+                            jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
                             jQuery.ajax({
                                 url: "/customer/zipCodeInfo/lookup",
                                 dataType: "json",
@@ -129,17 +130,21 @@ jQuery(document).ready(function() {
                                 success: function(response) {
                                     if (typeof response[0] !== "undefined") {
                                         currentCityState = response[0];
+                                        results = true;
+                                    } else {
+                                        results = false;
                                     }
                                 },
                                 complete: function() {
-                                    if (typeof currentCityState !== "undefined") {
-                                        jQuery("#" + addressFormType + "_zip_info_message").hide();
+                                    if (results==true) {
+                                        jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
                                         //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
                                         jQuery("#" + addressFormType + "_city_and_state").fadeIn();
                                         jQuery("[id='" + addressFormType + ":city']").val(currentCityState['city']);
                                         jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
                                     } else {
-                                        jQuery("#" + addressFormType + "_city_and_state").hide();
+                                        currentCityState="";
+                                        jQuery("#" + addressFormType + "_city_and_state").fadeOut();
                                         jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
                                     }
                                 }

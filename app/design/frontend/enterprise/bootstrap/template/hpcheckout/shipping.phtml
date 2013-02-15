@@ -77,6 +77,7 @@ jQuery(document).ready(function() {
     }
 
     checkoutPayment.getCityAndStateByZip("shipping");
+    
     jQuery('#shipping\\:postcode').change(function() {
         hpcheckout.update(true);
     });
@@ -95,6 +96,7 @@ jQuery(document).ready(function() {
         jQuery('#shipping-address-select').bind('change', function() {
             //enable shipping address to perform update
             checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
+            checkoutPayment.getCityAndStateByZip("shipping");
             hpcheckout.switchAddress(this.id);
             hpcheckout.update(true);
             //if a shipping address was chosen from the dropdown, disable the form
