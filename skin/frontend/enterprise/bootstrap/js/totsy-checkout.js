@@ -11,11 +11,11 @@ jQuery(document).ready(function() {
         var hasProfile = '';
         var isCollapsed = '';
         var lastUsedAddressId = '';
-        var zipSearchResults = "";
+        var zipSearchResults = 0;
         return {
             hasProfile: '',
             isCollapsed: false,
-            zipSearchResults: "",
+            zipSearchResults: 0,
             lastUsedAddressId: '',
             toggleViews: function() {
                 if (this.hasProfile) {
@@ -99,9 +99,17 @@ jQuery(document).ready(function() {
                     newCardWrap.show();
                 }
             },
+            disableZipLookup: function() {
+            	console.log(this.zipSearchResults);            	
+                if(this.zipSearchResults==2) {
+                    jQuery("[id$=postcode]").unbind("keyup");
+                }
+            },
             getCityAndStateByZip: function(formId) {
                 //register events to the right form by type. 'type' could be billing or shipping
                 var addressFormType = '';
+                var payment = this;
+                
                 if (formId) {
                     addressFormType = formId;
                 }
@@ -115,7 +123,7 @@ jQuery(document).ready(function() {
                     //hide these. fields when the user selects "new address"
                     jQuery("#" + addressFormType + "_city_and_state").fadeOut();
                     jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
-                    jQuery("[id='" + addressFormType + ":postcode']").keyup(function() {
+                    jQuery("[id='" + addressFormType + ":postcode']").bind("keyup change",function() {
                         if (this.value.length >= 5) {
                             jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
                             jQuery.ajax({
@@ -132,16 +140,19 @@ jQuery(document).ready(function() {
                                 success: function(response) {
                                     if (typeof response[0] !== "undefined") {
                                         currentCityState = response[0];
-                                        zipSearchResults = true;
+                                        payment.zipSearchResults = 1;
                                     } else {
-                                        zipSearchResults = false;
+                                        payment.zipSearchResults = 2;
+                                        jQuery("[id='" + addressFormType + ":city']").val("");
+                                        jQuery("[id='" + addressFormType + ":region_id']").val("");
                                     }
                                 },
                                 complete: function() {
-                                    if ( zipSearchResults==true ) {
-                                        jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
+                                    jQuery("#" + addressFormType + "_city_and_state").fadeIn();
+                                    jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
+
+                                    if ( payment.zipSearchResults==1 ) {
                                         //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
-                                        jQuery("#" + addressFormType + "_city_and_state").fadeIn();
                                         jQuery("[id='" + addressFormType + ":city']").val(currentCityState['city']);
                                         jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
                                     } else {

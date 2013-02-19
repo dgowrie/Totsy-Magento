@@ -44,11 +44,10 @@ if ($profilesCounter > 0 ) {
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
-
-    //disable zip lookup if state and/or zip are explicitly keyed in by user AND there zip lookup 
+    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";    
 
     checkoutPayment.toggleViews();
+	//disable zip lookup if state and/or zip are explicitly keyed in by user AND there zip lookup 
 
     jQuery("[id='payment[cybersource_subid]']").change(function() {
         checkoutPayment.setPaymentUI(this);

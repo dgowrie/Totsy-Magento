@@ -77,18 +77,15 @@
 	 // need to re-enable billing form controls before trying to send values to shipping form
 	jQuery(document).ready(function() {
 	    checkoutPayment.getCityAndStateByZip("billing");
-	    jQuery('#billing-address-select').bind('change', function() {
-	        hpcheckout.switchAddress(this.id);
-	        checkoutPayment.getCityAndStateByZip("billing");
-	    });
+	    
 	    if (typeof checkoutPayment !== "undefined") {
 	        if (checkoutPayment.hasProfile == true && checkoutPayment.lastUsedAddressId !== "") {
 	            jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
 	        }
 	        if (jQuery('#billing-address-select').length > 0) {
-	            if (checkoutPayment.hasProfile == false) {
-	                jQuery("#billing-address-select").attr("disabled", false);
+	            if (checkoutPayment.hasProfile == true && jQuery("#billing-address-select").val()!=="") {
 	                checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
+	                jQuery("#billing-address-select").attr("disabled", false);
 	            }
 	        }
 	        jQuery('#button_ship_to').bind('click', function() {
@@ -102,6 +99,9 @@
 	            }
 	            // then use hpcheckout.copyBillingToShipping() method
 	            hpcheckout.copyBillingToShipping();
+	            
+	            checkoutPayment.getCityAndStateByZip("billing");
+
 	            if (billAddySelect.length > 0) {
 	                if (billAddySelect.val() !== "") {
 	                    //if the user has a card on file, disable to ability to edit the billing address
@@ -116,10 +116,13 @@
 	        });
 	        if (jQuery('#billing-address-select').length > 0) {
 	            jQuery('#billing-address-select').bind('change', function() {
-	                if (jQuery('#billing-address-select').val() == "") {
-	                    checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
-	                }
 	                hpcheckout.switchAddress(this.id);
+	                
+	                if(this.value!==""){
+	                   checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
+	                } else {
+	                   checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
+	                } 
 	            });
 	        }
 	    }
