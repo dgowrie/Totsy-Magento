@@ -116,9 +116,12 @@
 	        });
 	        if (jQuery('#billing-address-select').length > 0) {
 	            jQuery('#billing-address-select').bind('change', function() {
-	                hpcheckout.switchAddress(this.id);
-	                
-	                if(this.value!==""){
+	            
+	            checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
+	            checkoutPayment.getCityAndStateByZip("billing");
+	            hpcheckout.switchAddress(this.id);
+    
+	                if(this.value!=="") {
 	                   checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
 	                } else {
 	                   checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');

@@ -103,6 +103,12 @@ jQuery(document).ready(function() {
             if (jQuery("#shipping-address-select").val() !== "") {
                 checkoutPayment.disableAddress(true, "hpcheckout-shipping-form");
             }
+            
+            if(this.value!=="") {
+	           checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
+	        } else {
+	           checkoutPayment.disableAddress(false, 'hpcheckout-shipping-form');
+	        }
         });
     }
     jQuery('#billing\\:selected').val(jQuery('#billing-address-select').val());
