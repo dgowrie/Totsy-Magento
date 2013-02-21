@@ -1,4 +1,5 @@
 var checkoutPayment = {};
+var bTest = false;
 jQuery(document).ready(function() {
     var billAddySelect = jQuery("#billing-address-select");
     var shipAddySelect = jQuery("#shipping-address-select");
@@ -106,10 +107,12 @@ jQuery(document).ready(function() {
                 }
             },
             getCityAndStateByZip: function(formId) {
+                if(bTest==true){
+            
                 //register events to the right form by type. 'type' could be billing or shipping
                 var addressFormType = '';
                 var payment = this;
-                
+                                
                 if (formId) {
                     addressFormType = formId;
                 }
@@ -169,6 +172,7 @@ jQuery(document).ready(function() {
                     jQuery("#" + addressFormType + "_zip_info_message").hide();
                 }
             }
+        }
         };
     })();
 });
