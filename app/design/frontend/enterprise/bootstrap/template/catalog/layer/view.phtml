@@ -34,17 +34,17 @@
 <?php if($this->canShowBlock()): ?>
 <div class="block block-layered-nav">
     <?php echo $this->getStateHtml() ?>
-
-    <div class="block-content">
-        <dl id="narrow-by-list">
-            <?php $_filters = $this->getFilters() ?>
-            <?php foreach ($_filters as $_filter): ?>
-            <?php /** @var $_filter Mage_Catalog_Block_Layer_Filter_Attribute */?>
-            <?php if($_filter->getItemsCount() && ($_filter->getName() !== 'Category')): ?>
-                <dd><?php echo $_filter->getHtml() ?></dd>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </dl>
-    </div>
+        <div class="block-content pull-right">
+            <dl id="narrow-by-list">
+                <?php $_filters = $this->getFilters() ?>
+                <?php foreach ($_filters as $_filter): ?>
+                    <?php /** @var $_filter Mage_Catalog_Block_Layer_Filter_Attribute */?>
+                    <?php if($_filter->getItemsCount()): ?>
+                        <dd><strong>Filter by <?php echo $this->__($_filter->getName()) ?>: </strong> <?php echo $_filter->getHtml() ?></dd>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </dl>
+            <script type="text/javascript">decorateDataList('narrow-by-list')</script>
+        </div>
 </div>
 <?php endif; ?>
