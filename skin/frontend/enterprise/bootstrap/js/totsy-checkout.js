@@ -1,5 +1,5 @@
 var checkoutPayment = {};
-var bTest = false;
+var bTest = true;
 jQuery(document).ready(function() {
     var billAddySelect = jQuery("#billing-address-select");
     var shipAddySelect = jQuery("#shipping-address-select");
