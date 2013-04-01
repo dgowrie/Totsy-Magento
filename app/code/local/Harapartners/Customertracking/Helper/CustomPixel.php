@@ -65,7 +65,7 @@ class Harapartners_Customertracking_Helper_CustomPixel
         $customertracking = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
         
         //Making sure that the user is actually a linkshare user
-        if(trim($customertracking->getData('affiliate_code')) != 'linkshare'  && $customertracking->getId() != 0) {
+        if(!empty($customertracking->getData()) || trim($customertracking->getData('affiliate_code')) != 'linkshare') {
             Mage::log("This is not a linkshare customer.", Zend_Log::INFO, 'linkshare_log.log');
             return $html;
         }
