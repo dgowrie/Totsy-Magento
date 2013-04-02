@@ -194,7 +194,9 @@ HpCheckout.prototype = {
         hpcheckoutObject.ajaxRequest(postData);
     },
     submit: function() {
+        jQuery("[id='shipping:selected']").attr("disabled", false);
         checkoutPayment.disableAddress(false, 'hpcheckout-shipping-form');
+        
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
             if (!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') !== true) {
