@@ -194,6 +194,7 @@ HpCheckout.prototype = {
         hpcheckoutObject.ajaxRequest(postData);
     },
     submit: function() {
+        checkoutPayment.disableAddress(false, 'hpcheckout-shipping-form');
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
             if (!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') !== true) {
@@ -229,12 +230,13 @@ HpCheckout.prototype = {
                 }
             }
         });
+        
         var checkoutObject = this;
         var postData = this.getFormData();
         postData += '&updatePayment=true';
         
         this.throbberOn();
-        
+
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
@@ -337,13 +339,14 @@ HpCheckout.prototype = {
             }
         }        
     },
-    getFormData: function(blockCodes) {
+    getFormData: function(blockCodes) {        
         var affectedFormIds = this.getFormIds(blockCodes);
         var returnFormDataArray = [];
+        
         //hack to fill in postcode and telephone WHEN THEY ARE NOT YET SET
         //this applies to customers who have not yet filled the postcode and telephone fields for the shipping address
         for (var blockIndex = 0; blockIndex < affectedFormIds.length; blockIndex++) {
-            if (blockIndex == 1 && (jQuery("[id='shipping:postcode']").val() == "" || jQuery("[id='shipping:telephone']").val() == "")) {
+           if (blockIndex == 1 && (jQuery("[id='shipping:postcode']").val() == "" || jQuery("[id='shipping:telephone']").val() == "")) {
                 shippingBlock = jQuery('#' + affectedFormIds[blockIndex]).serializeArray();
                 delete shippingBlock["shipping[postcode]"];
                 delete shippingBlock["shipping[telephone]"];
@@ -357,7 +360,8 @@ HpCheckout.prototype = {
                 returnFormDataArray.push(jQuery.param(shippingBlock));
                 jQuery("shipping[postcode]").val("");
                 jQuery("shipping[telephone]").val("");
-            } else {
+                
+            } else { 
                 returnFormDataArray.push(jQuery('#' + affectedFormIds[blockIndex]).serialize());
             }
         }
