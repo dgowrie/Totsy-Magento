@@ -63,17 +63,13 @@ class Totsy_Catalog_Model_Product_Purchase_Limit {
             }
 
 			$product = Mage::getModel('catalog/product')
-				//->addAttributeToSelect('purchase_max_sale_qty')
 				->loadByAttribute('sku',$row[0]);
 
 	        if (empty($product) ){
 	            continue;
 	        }
-	        echo '<pre>';
-	        print_r($product);
-	        die();
-	        $max = $product->qetPurchaseMaxSaleQty() + $row[1];
-	        $product->setPurchaseMaxSaleQty($max);
+
+	        $product->setPurchaseMaxSaleQty($row[1]);
 	        $product->save();
         }
 
