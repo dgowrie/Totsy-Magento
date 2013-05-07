@@ -107,6 +107,7 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
             }
 
             $product = $this->_initProduct();
+            Mage::log('sku: '.$product->getSku());
             $related = $this->getRequest()->getParam('related_product');
             /**
              * Check product availability
@@ -158,7 +159,16 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
                 }
                 $this->_goBack();
             }
+        } catch (Totsy_Catalog_Exception $e){
+            $this->_getSession()->addException(
+                $e,
+                $this->__('You have reached purchase limit for this product')
+            );
+            Mage::logException($e);
+            $this->_goBack();
         } catch (Mage_Core_Exception $e) {
+            Mage::logException($e);
+
             if ($this->_getSession()->getUseNotice(true)) {
                 $this->_getSession()->addNotice($e->getMessage());
             } else {
@@ -224,4 +234,26 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
         $this->_getSession()->setCartWasUpdated(true)
             ->setCountDownTimer($this->_getCurrentTime());
     }
+
+    /**
+     * Initialize product instance from request data
+     *
+     * @return Mage_Catalog_Model_Product || false
+     */
+    protected function _initProduct()
+    {
+        $productId = (int) $this->getRequest()->getParam('product');
+        if ($productId) {
+            $product = Mage::getModel('catalog/product')
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load($productId);
+            if ($product->getId()) {
+                Mage::getModel('totsy_catalog/product_purchase_limit')
+                    ->checkPurchaseLimit($product);
+                return $product;
+            }
+        }
+        return false;
+    }
+
 }

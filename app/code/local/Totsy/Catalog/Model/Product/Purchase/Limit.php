@@ -1,10 +1,15 @@
 <?php 
 
-class Totsy_Catalog_Model_Product_Purchase_Limit {
+class Totsy_Catalog_Model_Product_Purchase_Limit extends Mage_Core_Model_Abstract {
 
     protected $_allowedExtentions = array('csv');
     protected $_orgFileName = null;
     protected $_fileName = null;
+
+    protected function _construct(){
+        parent::_construct();
+        $this->_init('totsy_catalog/product_purchase_limit', 'entity_id');
+    }
 
     public function import(){
         
@@ -12,6 +17,26 @@ class Totsy_Catalog_Model_Product_Purchase_Limit {
         $this->_processFileData();
 
         return $this;
+    }
+
+    public function checkPurchaseLimit($product){
+        
+        if(!$product->hasPurchaseMaxSaleQty()){
+            // product doens't have purchase limit
+            return;
+        }
+
+        $limit = $product->getPurchaseMaxSaleQty();
+        $purchases = $this->getResource()
+            ->getProductPurchasesByCustomer(
+                $product->getId(),
+                 Mage::getSingleton('customer/session')->getCustomer()->getId()
+            );
+
+        if ($purchases >= $limit) {
+            throw new Totsy_Catalog_Exception('Sorry, this product has a purchase limit of "',$limit,'" per customer');
+        }
+        return;
     }
 
     protected function _uploadFile(){
@@ -69,6 +94,7 @@ class Totsy_Catalog_Model_Product_Purchase_Limit {
 	            continue;
 	        }
 
+            Mage::log($product->getSku(),' ',$row[1]);
 	        $product->setPurchaseMaxSaleQty($row[1]);
 	        $product->save();
         }

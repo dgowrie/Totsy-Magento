@@ -153,4 +153,8 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
         }
         return $this;
     }
+
+    public function checkPurchaseLimit($observer){
+        throw new Exception('tralalala');
+    }
 }

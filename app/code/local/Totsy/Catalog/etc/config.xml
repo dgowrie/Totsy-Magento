@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Catalog>
-            <version>0.1.4</version>
+            <version>0.1.5</version>
         </Totsy_Catalog>
     </modules>
     <global>
@@ -32,7 +32,16 @@
         <models>
             <totsy_catalog>
                 <class>Totsy_Catalog_Model</class>
+                <resourceModel>totsy_catalog_mysql4</resourceModel>
             </totsy_catalog>
+            <totsy_catalog_mysql4>
+                <class>Totsy_Catalog_Model_Mysql4</class>
+                <entities>
+                    <product_purchase_limit>
+                        <table>product_purchase_limit</table>
+                    </product_purchase_limit>
+                </entities>
+            </totsy_catalog_mysql4>
             <catalog>
                 <rewrite>
                     <product_attribute_source_tax>Totsy_Catalog_Model_Product_Attribute_Source_Tax</product_attribute_source_tax>
@@ -50,6 +59,17 @@
                     <use>core_setup</use>
                 </connection>
             </totsycatalog_setup>
+            <totsy_catalog_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </totsy_catalog_write>
+            <totsy_catalog_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </totsy_catalog_read>
+
         </resources>
     </global>
     <admin>
