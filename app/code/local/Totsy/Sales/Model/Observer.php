@@ -155,6 +155,31 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
     }
 
     public function checkPurchaseLimit($observer){
-        throw new Exception('tralalala');
+        
+        $data = $observer->getData('info');
+        $cart = $observer->getCart();
+
+        foreach ($data as $itemId => $itemInfo) {
+            $item = $cart->getQuote()->getItemById($itemId);
+            if (!$item 
+                || !empty($itemInfo['remove']) 
+                || (isset($itemInfo['qty']) && $itemInfo['qty']=='0')
+            ) {
+                continue;
+            }
+            $qty = isset($itemInfo['qty']) ? (float) $itemInfo['qty'] : false;
+            if ($qty <= 0) {
+                continue;
+            }
+
+            $product = Mage::getModel('catalog/product')
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load($item->getProductId());
+            if ($product->getId()) {
+                Mage::getModel('totsy_catalog/product_purchase_limit')
+                    ->checkPurchaseLimit($product);
+            } 
+        }
+
     }
 }
