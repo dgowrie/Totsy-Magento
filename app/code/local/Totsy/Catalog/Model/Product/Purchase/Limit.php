@@ -19,7 +19,7 @@ class Totsy_Catalog_Model_Product_Purchase_Limit extends Mage_Core_Model_Abstrac
         return $this;
     }
 
-    public function checkPurchaseLimit($product){
+    public function checkPurchaseLimit($product,$futureQty=null){
         
         if(!$product->hasPurchaseMaxSaleQty()){
             // product doens't have purchase limit
@@ -32,10 +32,19 @@ class Totsy_Catalog_Model_Product_Purchase_Limit extends Mage_Core_Model_Abstrac
                 $product->getId(),
                  Mage::getSingleton('customer/session')->getCustomer()->getId()
             );
+        if (!is_null($futureQty)){
+            $purchases+= (int) $futureQty;
+
+            if ($purchases > $limit) {
+                throw new Totsy_Catalog_Exception('Sorry, this product has a purchase limit of "'.$limit.'" per customer');
+            }
+            return;
+        }
 
         if ($purchases >= $limit) {
-            throw new Totsy_Catalog_Exception('Sorry, this product has a purchase limit of "',$limit,'" per customer');
+            throw new Totsy_Catalog_Exception('Sorry, this product has a purchase limit of "'.$limit.'" per customer');
         }
+
         return;
     }
 

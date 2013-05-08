@@ -20,5 +20,3 @@ CREATE TABLE {$this->getTable('totsy_catalog/product_purchase_limit')} (
 ");
  
 $installer->endSetup();
-
-Mage::log('done: '. $this->getTable('totsy_catalog/product_purchase_limit'));

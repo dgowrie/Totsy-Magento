@@ -177,8 +177,8 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
                 ->load($item->getProductId());
             if ($product->getId()) {
                 Mage::getModel('totsy_catalog/product_purchase_limit')
-                    ->checkPurchaseLimit($product);
-            } 
+                    ->checkPurchaseLimit($product,$qty);
+            }  
         }
 
     }
